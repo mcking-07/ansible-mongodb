@@ -1,0 +1,66 @@
+---   
+- name: stop service mongo-db
+  systemd:
+    name: mongod
+    state: stopped
+
+- name: remove mongodb
+  apt:
+    name: mongodb-org
+    state: absent
+    purge: yes
+    update_cache: yes
+
+- name: remove useless packages from the cache
+  apt:
+    autoclean: yes
+    autoremove: yes
+
+- name: import mongodb apt-key
+  apt_key:
+    url: "https://www.mongodb.org/static/pgp/server-{{ mongo_version }}.asc"
+    state: present
+    
+- name: add mongodb apt-repo
+  apt_repository:
+    repo: "deb https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/{{ mongo_version }} multiverse"
+    state: present
+    filename: "mongodb-org-{{ mongo_version }}.list"
+    update_cache: yes 
+
+- name: install mongo-db 
+  apt:
+    name: mongodb-org
+    state: latest
+    update_cache: yes
+
+- name: update mongos
+  apt: 
+    name: mongodb-org-mongos
+    state: latest
+
+- name: update mongo-server
+  apt: 
+    name: mongodb-org-server
+    state: latest
+
+- name: update mongo-shell
+  apt: 
+    name: mongodb-org-shell
+    state: latest
+
+- name: update mongo-tools
+  apt: 
+    name: mongodb-org-tools
+    state: latest
+
+- name: enable service mongo-db
+  systemd:
+    name: mongod
+    enabled: yes
+    daemon_reload: yes
+
+- name: start and ensure mongo-db is running
+  systemd:
+    name: mongod
+    state: started

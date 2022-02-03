@@ -1,0 +1,5 @@
+[localhost]
+127.0.0.1
+
+[server-1]
+128.68.24.82 ansible_user=root

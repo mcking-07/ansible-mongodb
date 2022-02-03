@@ -1,0 +1,29 @@
+---   
+- name: import mongodb apt-key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-4.0.asc
+    state: present
+    
+- name: add mongodb apt-repo
+  apt_repository:
+    repo: deb https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse
+    state: present
+    filename: mongodb-org-4.0.list
+    update_cache: yes
+
+- name: install mongo-db
+  apt:
+    name: mongodb-org
+    state: present
+    update_cache: yes
+
+- name: enable service mongo-db
+  systemd:
+    name: mongod
+    enabled: yes
+    daemon_reload: yes
+
+- name: start and ensure mongo-db is running
+  systemd:
+    name: mongod
+    state: started

@@ -1,0 +1,13 @@
+---
+- name: install mongo-db on any server
+  hosts: localhost
+  become: true
+  roles:
+    - mongodb-3.6
+    - mongodb-4.0
+    - mongodb-4.2
+    - mongodb-4.4
+    - mongodb-5.0
+    - mongo-upgrade
+  vars:
+    - mongo_version: 4.2
